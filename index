@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>狭义相对论时间膨胀计算器</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .calculator {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .result {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            border-left: 4px solid #3498db;
+        }
+        .time-dilation-factor {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e74c3c;
+            margin: 10px 0;
+        }
+        .explanation {
+            margin-top: 20px;
+            font-style: italic;
+            color: #7f8c8d;
+        }
+        .examples {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .reference {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #7f8c8d;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>狭义相对论时间膨胀计算器</h1>
+    
+    <div class="calculator">
+        <div class="input-group">
+            <label for="velocity">输入运动速度与光速的比值 (v/c):</label>
+            <input type="number" id="velocity" min="0" max="0.999999" step="0.001" value="0.5">
+            <p><small>请输入0到1之间的值（例如：0.5表示光速的一半）</small></p>
+        </div>
+        
+        <button onclick="calculateTimeDilation()">计算时间膨胀</button>
+        
+        <div class="result">
+            <h3>计算结果:</h3>
+            <p>时间膨胀倍数: <span id="result" class="time-dilation-factor">1.0</span></p>
+            <div id="explanation" class="explanation">
+                请输入速度值并点击计算按钮查看结果。
+            </div>
+        </div>
+    </div>
+    
+    <div class="examples">
+        <h3>时间膨胀效应示例</h3>
+        <table>
+            <tr>
+                <th>速度 (v/c)</th>
+                <th>时间膨胀倍数</th>
+                <th>说明</th>
+            </tr>
+            <tr>
+                <td>0.5</td>
+                <td>1.15</td>
+                <td>飞船内1年，地球上约1.15年[3](@ref)</td>
+            </tr>
+            <tr>
+                <td>0.9</td>
+                <td>2.29</td>
+                <td>飞船内1年，地球上约2.29年</td>
+            </tr>
+            <tr>
+                <td>0.99</td>
+                <td>7.09</td>
+                <td>飞船内1年，地球上约7年[9](@ref)</td>
+            </tr>
+            <tr>
+                <td>0.999</td>
+                <td>22.37</td>
+                <td>飞船内1年，地球上约22.37年</td>
+            </tr>
+            <tr>
+                <td>0.9999</td>
+                <td>70.71</td>
+                <td>飞船内1年，地球上约70年[9](@ref)</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="reference">
+        <p>本计算器基于爱因斯坦狭义相对论的时间膨胀公式[2,3](@ref)</p>
+    </div>
+
+    <script>
+        function calculateTimeDilation() {
+            // 获取输入的速度值
+            const velocityRatio = parseFloat(document.getElementById('velocity').value);
+            
+            // 验证输入值
+            if (isNaN(velocityRatio) || velocityRatio <= 0 || velocityRatio >= 1) {
+                alert('请输入0到1之间的有效值！');
+                return;
+            }
+            
+            // 计算时间膨胀倍数
+            const timeDilationFactor = 1 / Math.sqrt(1 - Math.pow(velocityRatio, 2));
+            
+            // 显示结果
+            document.getElementById('result').textContent = timeDilationFactor.toFixed(6);
+            
+            // 更新解释文本
+            const explanation = document.getElementById('explanation');
+            explanation.innerHTML = `
+                根据狭义相对论，当物体以<b>${(velocityRatio * 100).toFixed(2)}%</b>的光速运动时，
+                时间流逝速度会减慢为静止观察者的<b>${(1/timeDilationFactor).toFixed(6)}</b>倍。<br><br>
+                
+                这意味着：<br>
+                - 在飞船上度过<strong>1年</strong>，地球上将过去<strong>${timeDilationFactor.toFixed(6)}年</strong><br>
+                - 飞船上度过<strong>1天</strong>，地球上将过去<strong>${timeDilationFactor.toFixed(6)}天</strong><br><br>
+                
+                计算公式: t' = t / √[1 - (v/c)²][2,3](@ref)
+            `;
+        }
+        
+        // 初始计算一次
+        window.onload = calculateTimeDilation;
+    </script>
+</body>
+</html>
